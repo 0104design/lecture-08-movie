@@ -19,10 +19,10 @@ const Img = styled.img`
     height: 550px;
     width: 100%;
     border-radius: 15px;
-    transition: all 2s;
+    transition: all 0.5s;
 
     &:hover {
-        transform: scale(0.8);
+        transform: scale(1.03);
     }
 `;
 
@@ -75,31 +75,31 @@ const Form = styled.form`
 
 const Wrap = styled.div`
     padding: 35px;
-`
+`;
 
-type Res = {
-    Search: MovieItem[];
-};
+type Res = { Search: MovieItem[] };
+
 function Search() {
     const [searchParams] = useSearchParams();
     const keyword = searchParams.get("keyword");
     const [list, setList] = useState<MovieItem[]>([]);
+    // const [error, setError] = useState(""); // 에러가 났을 때의 string을 관리하는 State
 
     const [input, setInput] = useState(keyword || "");
     const navigate = useNavigate();
 
     useEffect(() => {
+        if (!keyword) return;
+
         fetch(`https://www.omdbapi.com/?apikey=6a0a8eb4&s=${keyword}`)
             .then(res => res.json())
             .then((json: Res) => {
                 setList(json.Search);
             })
-            .catch(err => console.log(err));
+            .catch(err => {
+                console.log(err);
+            });
     }, [keyword]);
-
-    if (!keyword) {
-        return <div>검색 결과가 없습니다</div>;
-    }
 
     const onChange = (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
         setInput(event.target.value);
@@ -114,6 +114,7 @@ function Search() {
 
     return (
         <Wrap>
+            <h2>검색 키워드 : {keyword}</h2>
             <Form onSubmit={onSubmit}>
                 <Input onChange={onChange} value={input} />
                 <Button type={"submit"}>검색</Button>
