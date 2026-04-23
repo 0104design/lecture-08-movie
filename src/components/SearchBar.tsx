@@ -30,7 +30,7 @@ function SearchBar() {
         event.preventDefault();
         const kw = keyword.trim();
         if (!kw) return;
-        navigate(`search/?keyword=${encodeURIComponent(kw)}`);
+        navigate(`/search/?keyword=${encodeURIComponent(kw)}`);
     };
 
     const onChange = (event: ChangeEvent<HTMLInputElement, HTMLInputElement>) => {
